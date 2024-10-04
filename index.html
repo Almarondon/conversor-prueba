@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desafío - Inmobiliaria</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <section id="conversor">
+        <div class="position-absolute top-50 start-50 translate-middle">
+          <div class="card" style="width: 24rem">
+            <div class="card-body">
+              <form>
+                <fieldset>
+                  <legend>Conversor de monedas Nacional</legend>
+                  <div class="mb-3">
+                    <label for="textPesos" class="form-label"> Pesos CLP</label>
+                    <input
+                      type="number"
+                      id="textPesos"
+                      class="form-control"
+                      placeholder="CLP"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="selectMoneda" class="form-label">
+                      Moneda a convertir</label
+                    >
+                    <select id="selectMoneda" class="form-select"></select>
+                  </div>
+                  <div class="mb-3">
+                    <button
+                      type="button"
+                      id="btnBuscar"
+                      class="btn btn-primary"
+                    >
+                      Buscar
+                    </button>
+                  </div>
+                  <div class="mb-3">
+                    <label
+                      >Resultado: <span id="spanValorPesos">0</span>$</label
+                    >
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assets/js/index.js"></script>
+  </body>
+</html>
