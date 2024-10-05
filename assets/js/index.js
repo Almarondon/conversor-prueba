@@ -2,8 +2,11 @@ const textPesos = document.getElementById("textPesos");
 const selectMoneda = document.getElementById("selectMoneda");
 const btnBuscar = document.getElementById("btnBuscar");
 const spanValorPesos = document.getElementById("spanValorPesos");
+const spanErrores = document.getElementById("spanErrores");
+const myChart = document.getElementById("myChart");
 
 let mindicadorValue = {};
+let grafico;
 
 const agregarOptionMoneda = (key) => {
   const nuevaOpcion = document.createElement("option");
@@ -24,15 +27,63 @@ const calcular = (valorInput, key) => {
   return (valorInput / valor).toFixed(4);
 };
 
-const clickCalcular = () => {
-  const valorInput = Number(textPesos.value);
+const convertirFecha = (fechaJson) => {
+  const fecha = new Date(fechaJson);
 
-  if (!isNaN(valorInput) && valorInput > 0) {
+  const dia = String(fecha.getUTCDate()).padStart(2, "0");
+  const mes = String(fecha.getUTCMonth() + 1).padStart(2, "0");
+  const anio = fecha.getUTCFullYear();
+
+  return `${dia}-${mes}-${anio}`;
+};
+
+const renderizarChart = (keySelect) => {
+  if (grafico) {
+    grafico.destroy();
+  }
+
+  fetch(`https://mindicador.cl/api/${keySelect}/2024`)
+    .then((response) => response.json())
+    .then((value) => {
+      const series = value.serie.slice(0, 10);
+
+      const labels = series.map((s) => convertirFecha(s.fecha));
+      const data = series.map((s) => s.valor);
+
+      grafico = new Chart(myChart, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Últimos 10 días",
+              data: data,
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+    })
+    .catch(() => {
+      indicarError();
+    });
+};
+
+const clickCalcular = () => {
+  spanErrores.innerHTML = "";
+  try {
+    const valorInput = Number(textPesos.value);
     const keySelect = selectMoneda.value;
 
-    const valorEnPesos = calcular(valorInput, keySelect);
+    if (!isNaN(valorInput) && valorInput > 0) {
+      const valorEnPesos = calcular(valorInput, keySelect);
 
-    spanValorPesos.innerHTML = valorEnPesos;
+      spanValorPesos.innerHTML = valorEnPesos;
+    }
+
+    renderizarChart(keySelect);
+  } catch (error) {
+    indicarError();
   }
 };
 
@@ -45,6 +96,10 @@ const getAllKeys = (value) => {
 
 btnBuscar.addEventListener("click", clickCalcular);
 
+const indicarError = () => {
+  spanErrores.innerHTML = "Ha ocurrido un error";
+};
+
 fetch("https://mindicador.cl/api")
   .then((response) => response.json())
   .then((value) => {
@@ -53,4 +108,7 @@ fetch("https://mindicador.cl/api")
     const validKeys = getAllKeys(value);
 
     agregarOpciones(validKeys);
+  })
+  .catch((r) => {
+    indicarError();
   });
